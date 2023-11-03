@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Suporte</title>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+    <script>
+        emailjs.init("service_vbzz1ds"); // Substitua com seu User ID do Email.js
+
+        function enviarSuporte() {
+            var nome = document.getElementById('nome').value;
+            var email = document.getElementById('email').value;
+            var mensagem = document.getElementById('mensagem').value;
+
+            var templateParams = {
+                nome: nome,
+                email: email,
+                mensagem: mensagem
+            };
+
+            emailjs.send("service_vbzz1ds", "service_vbzz1ds", templateParams)
+                .then(function(response) {
+                    alert("Sua solicitação de suporte foi enviada com sucesso. Entraremos em contato em breve.");
+                    mostrarNotificacao("Solicitação enviada com sucesso!");
+                }, function(error) {
+                    console.log("Erro ao enviar e-mail:", error);
+                    mostrarNotificacao("Erro ao enviar a solicitação. Tente novamente mais tarde.");
+                });
+        }
+
+        function mostrarNotificacao(mensagem) {
+            if (Notification.permission === "granted") {
+                new Notification("Sucesso!", { body: mensagem });
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function(permission) {
+                    if (permission === "granted") {
+                        new Notification("Sucesso!", { body: mensagem });
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Sistema de Suporte</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Envie uma Solicitação de Suporte</h2>
+            <form>
+                <label for="nome">Seu Nome:</label>
+                <input type="text" id="nome" required>
+                <br>
+                <label for="email">Seu E-mail:</label>
+                <input type="email" id="email" required>
+                <br>
+                <label for="mensagem">Sua Mensagem:</label>
+                <textarea id="mensagem" rows="4" required></textarea>
+                <br>
+                <button type="button" onclick="enviarSuporte()">Enviar Solicitação</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
